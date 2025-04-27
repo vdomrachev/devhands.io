@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demodb
+    driverClassName: org.postgresql.Driver
+    username: demo
+    password: demo
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+#    show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  threads:
+    virtual:
+      enabled: true
