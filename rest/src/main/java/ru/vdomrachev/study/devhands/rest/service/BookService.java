@@ -46,7 +46,7 @@ public class BookService {
     }
 
     public Book findRandomCached(Integer rows) {
-        long rand = Math.round(Math.random() * rows);
+    	long rand = (long)(Math.random() * rows) + 1;
         return service.findByIdCached(rand).orElse(null);
     }
 
