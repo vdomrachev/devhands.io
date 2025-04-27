@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.vdomrachev.study.devhands</groupId>
-    <artifactId>rest</artifactId>
+    <artifactId>rest-reactive</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>rest-reactive</name>
     <properties>
