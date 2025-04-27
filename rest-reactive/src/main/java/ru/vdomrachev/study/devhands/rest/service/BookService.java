@@ -26,7 +26,7 @@ public class BookService {
     }
 
     public Mono<Book> findRandom(int rows) {
-        long rand = Math.round(Math.random() * rows);
+        long rand = (long)(Math.random() * rows) + 1;
         return repository.findById(rand);
     }
 

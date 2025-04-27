@@ -41,7 +41,7 @@ public class BookService {
     }
 
     public Book findRandom(Integer rows) {
-        long rand = Math.round(Math.random() * rows);
+        long rand = (long)(Math.random() * rows) + 1;
         return repository.findById(rand).orElse(null);
     }
 
