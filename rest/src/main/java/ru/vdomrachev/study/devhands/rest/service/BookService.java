@@ -52,7 +52,6 @@ public class BookService {
 
     @Cacheable(value = "books", key = "#id")
     public Optional<Book> findByIdCached(Long id) {
-        System.out.println("Fetching book from database...");
         return repository.findById(id);
     }
 
