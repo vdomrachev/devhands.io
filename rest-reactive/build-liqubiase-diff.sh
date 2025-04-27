@@ -1,0 +1,1 @@
+./mvnw clean package -DskipTests=true liquibase:diff -Dliquibase.url=jdbc:postgresql://localhost:5432/demodb

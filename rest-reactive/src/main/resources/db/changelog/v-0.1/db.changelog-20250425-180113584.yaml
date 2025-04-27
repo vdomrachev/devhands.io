@@ -1,0 +1,34 @@
+databaseChangeLog:
+- changeSet:
+    id: 1745604084071-1
+    author: fairo (generated)
+    changes:
+    - createSequence:
+        incrementBy: 50
+        sequenceName: book_seq
+        startValue: 1
+- changeSet:
+    id: 1745604084071-2
+    author: fairo (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: bookPK
+            name: id
+            type: BIGINT
+        - column:
+            name: author
+            type: VARCHAR(255)
+        - column:
+            name: isbn
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: book
+

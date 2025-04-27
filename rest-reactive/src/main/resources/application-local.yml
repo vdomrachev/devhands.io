@@ -1,0 +1,9 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/demodb
+    username: demo
+    password: demo
+  data:
+    redis:
+      host: localhost
+      port: 6379

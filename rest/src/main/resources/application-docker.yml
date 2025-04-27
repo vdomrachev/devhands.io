@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://appdb:5432/appdb
+    driverClassName: org.postgresql.Driver
+    username: demo
+    password: demo
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
