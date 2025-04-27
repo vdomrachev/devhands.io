@@ -18,8 +18,8 @@ java -jar app.jar --spring.profiles.active=local
 
 ### wrk2
 wrk2 -t2 -c100 -d30s -R2000 http://localhost:8080/api/v1/books/hello
-wrk2 -t2 -c100 -d30s -R2000 http://localhost:8080/api/v1/books/random/1000
-wrk2 -t2 -c100 -d30s -R2000 http://localhost:8080/api/v1/books/random/cached/1000
+wrk2 -t2 -c100 -d30s -R2000 http://localhost:8080/api/v1/books/random/rows/1000/
+wrk2 -t2 -c100 -d30s -R2000 http://localhost:8080/api/v1/books/random/cached/rows/1000/
 
 #### rest postgres
 slava@slava-IdeaPad-5-Pro-14ACN6:~$ wrk2 -t2 -c100 -d30s -R50000 http://localhost:8080/api/v1/books/random/rows/1000/
