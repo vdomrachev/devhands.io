@@ -18,6 +18,8 @@
 .settings
 .springBeans
 .vscode
+.idea
+.gigaide
 /code
 MANIFEST.MF
 _site/
