@@ -1,7 +1,12 @@
 package ru.vdomrachev.study.devhands.rest.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import java.security.MessageDigest;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,32 +15,70 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 import ru.vdomrachev.study.devhands.rest.dto.BookDto;
 import ru.vdomrachev.study.devhands.rest.entity.Book;
 import ru.vdomrachev.study.devhands.rest.mapper.BookMapper;
 import ru.vdomrachev.study.devhands.rest.service.BookService;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
 
     private final BookService service;
 
     private final BookMapper mapper;
 
+    private MessageDigest md;
+    private Random random;
+
+    @PostConstruct
+    private void init() {
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            random = new Random(42);
+        } catch (Exception e) {
+            log.error("Error init SHA-256", e);
+        }
+    }
+
     @GetMapping("/hello")
     public String hello() {
         return "Hello from spring boot!";
     }
 
-    @GetMapping("/hello/{timeout}")
-    public String getAnonymousInfo(@PathVariable Long timeout) throws InterruptedException {
+    @GetMapping("/hello/sleep/{timeout}")
+    public String helloWithSleep(@PathVariable Long timeout) throws InterruptedException {
         Thread.sleep(timeout);
         return "Hello from spring boot after " + timeout + " ms!";
+    }
+
+    @GetMapping("/hello/sleep/{timeout}/locked")
+    public String helookWithSleepLocked(@PathVariable Long timeout) throws InterruptedException {
+        synchronized (new Object()) {
+            Thread.sleep(timeout);
+        }
+        return "Hello from spring boot after " + timeout + " ms!";
+    }
+
+    @GetMapping("/hello/consume/{interval}")
+    public String helloAndConsumeCpu(@PathVariable Long interval) throws InterruptedException {
+        consumeCpu(interval);
+        return "Hello from spring boot after " + interval + " ms!";
+    }
+
+    private void consumeCpu(Long interval) {
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + interval;
+        while (System.currentTimeMillis() < endTime) {
+            int randomNumber = random.nextInt();
+            String randomString = String.valueOf(randomNumber);
+            md.update(randomString.getBytes());
+            byte[] digest = md.digest();
+        }
     }
 
     @GetMapping("/{id}")
