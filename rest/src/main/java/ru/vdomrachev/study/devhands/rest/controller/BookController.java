@@ -1,11 +1,11 @@
 package ru.vdomrachev.study.devhands.rest.controller;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -32,18 +32,7 @@ public class BookController {
 
     private final BookMapper mapper;
 
-    private MessageDigest md;
-    private Random random;
-
-    @PostConstruct
-    private void init() {
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            random = new Random(42);
-        } catch (Exception e) {
-            log.error("Error init SHA-256", e);
-        }
-    }
+    private final Random random = new Random(42);
 
     @GetMapping("/hello")
     public String hello() {
@@ -52,12 +41,16 @@ public class BookController {
 
     @GetMapping("/hello/sleep/{timeout}")
     public String helloWithSleep(@PathVariable Long timeout) throws InterruptedException {
+
+        log.info("Current Thread Name: {}", Thread.currentThread().getName());
+        log.info("Current Thread ID: {}", Thread.currentThread().threadId());
+
         Thread.sleep(timeout);
         return "Hello from spring boot after " + timeout + " ms!";
     }
 
     @GetMapping("/hello/sleep/{timeout}/locked")
-    public String helookWithSleepLocked(@PathVariable Long timeout) throws InterruptedException {
+    public String helloWithSleepLocked(@PathVariable Long timeout) throws InterruptedException {
         synchronized (new Object()) {
             Thread.sleep(timeout);
         }
@@ -71,13 +64,18 @@ public class BookController {
     }
 
     private void consumeCpu(Long interval) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         long startTime = System.currentTimeMillis();
         long endTime = startTime + interval;
         while (System.currentTimeMillis() < endTime) {
             int randomNumber = random.nextInt();
             String randomString = String.valueOf(randomNumber);
-            md.update(randomString.getBytes());
-            byte[] digest = md.digest();
+            md.digest(randomString.getBytes());
         }
     }
 
