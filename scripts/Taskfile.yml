@@ -1,0 +1,48 @@
+version: '3'
+
+#silent: true
+
+vars:
+  APP: '/home/vdomrachev/'
+  CONNECTIONS: 128
+  THREADS: 4
+  DURATION: 40s
+  URL: 'http://localhost:8080/api/v1/books/hello'
+  RATE: 10000
+  SEQ: '10000-50000,{{.RATE}}'
+  R_MASK: '{{"{{R}}"}}'
+
+tasks:
+  shot:
+    desc: 'wrkx - one shot'
+    cmds:
+      - /local/wrk -c{{.CONNECTIONS}} -t{{.THREADS}} -R{{.RATE}} -d{{.DURATION}} -L {{.URL}}
+
+  blast:
+    desc: 'wrkx - shot  sequence'
+    cmds:
+      - task: generate
+      - ./run.sh
+      - task: extract
+
+  generate:
+    desc: 'lsmt - generate sequence'
+    dir: '{{.APP}}'  
+    cmds:
+      - echo "#!/bin/bash" > run.sh 
+      - echo "rm results/*" >> run.sh
+      - /local/lsmt/lsmt --generate --out="/local/wrk -c{{.CONNECTIONS}} -t{{.THREADS}} -R{{.R_MASK}} -d{{.DURATION}} -L {{.URL}} > results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R{{.R_MASK}}.txt" --cycles="R={{.SEQ}}" -sleep=20 >> {{.APP}}/run.sh
+      - cat run.sh
+
+  clean:
+    desc: 'lsmt - clean files'
+    dir: '{{.APP}}'
+    cmds:
+      - rm results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt
+
+  extract:
+    desc: 'lsmt - extract results'
+    dir: '{{.APP}}'
+    cmds:
+      - /local/lsmt/lsmt --extract --origin=wrk --files="results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt" --out="{ Test:\"cpu100\", R:{{"{{R}}"}}, rps:{{"{{rps}}"}}, l:{{"{{latency_p99}}"}} }," | sort -t ',' -n -k2.8
+
