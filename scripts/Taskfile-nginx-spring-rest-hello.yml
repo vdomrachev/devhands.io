@@ -3,13 +3,13 @@ version: '3'
 #silent: true
 
 vars:
-  APP: '/home/vdomrachev/loadtesting'
+  APP: '/home/vdomrachev/loadtesting/nginx-spring-rest-hello'
   CONNECTIONS: 128
   THREADS: 4
   DURATION: 40s
-  URL: 'http://localhost:80'
+  URL: 'http://localhost:80/app/api/v1/books/hello'
   RATE: 10000
-  SEQ: '10000-50000,{{.RATE}}'
+  SEQ: '10000-150000,{{.RATE}}'
   R_MASK: '{{"{{R}}"}}'
 
 tasks:
@@ -20,6 +20,7 @@ tasks:
 
   blast:
     desc: 'wrkx - shot  sequence'
+    dir: '{{.APP}}'
     cmds:
       - task: generate
       - ./run.sh
@@ -27,9 +28,9 @@ tasks:
 
   generate:
     desc: 'lsmt - generate sequence'
-    dir: '{{.APP}}'  
+    dir: '{{.APP}}'
     cmds:
-      - echo "#!/bin/bash" > run.sh 
+      - echo "#!/bin/bash" > run.sh
       - echo "rm results/*" >> run.sh
       - /local/lsmt/lsmt --generate --out="/local/wrk -c{{.CONNECTIONS}} -t{{.THREADS}} -R{{.R_MASK}} -d{{.DURATION}} -L {{.URL}} > results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R{{.R_MASK}}.txt" --cycles="R={{.SEQ}}" -sleep=20 >> {{.APP}}/run.sh
       - cat run.sh
@@ -45,5 +46,4 @@ tasks:
     desc: 'lsmt - extract results'
     dir: '{{.APP}}'
     cmds:
-      - /local/lsmt/lsmt --extract --origin=wrk --files="results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt" --out="{ Test:\"nginx\", R:{{"{{R}}"}}, rps:{{"{{rps}}"}}, l:{{"{{latency_p99}}"}} }," | sort -t ',' -n -k2.8
-
+      - /local/lsmt/lsmt --extract --origin=wrk --files="results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt" --out="{ Test:\"nginx-spring-rest-hello\", R:{{"{{R}}"}}, rps:{{"{{rps}}"}}, l:{{"{{latency_p99}}"}} }," | sort -t ',' -n -k2.8
