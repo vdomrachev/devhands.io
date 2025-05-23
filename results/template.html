@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+
+    var mydata = [
+    {Test:"cpu100", R:10000, rps:9923.30, l:11.99 },
+    {Test:"cpu100", R:15000, rps:14972.23, l:10.42 },
+    {Test:"cpu100", R:20000, rps:19844.91, l:20.54 },
+    {Test:"cpu100", R:25000, rps:24807.03, l:25.18 },
+    {Test:"cpu100", R:30000, rps:29768.47, l:26.38 },
+    {Test:"cpu100", R:35000, rps:34723.30, l:18.77 },
+    {Test:"cpu100", R:40000, rps:39456.83, l:19.89 },
+    {Test:"cpu100", R:45000, rps:44909.67, l:11.45 },
+    {Test:"cpu100", R:50000, rps:49900.72, l:30.72 },
+    {Test:"cpu100", R:55000, rps:54888.85, l:14.05 },
+    {Test:"cpu100", R:60000, rps:59536.54, l:18.94 },
+    {Test:"cpu100", R:65000, rps:64830.26, l:55.01 },
+    {Test:"cpu100", R:70000, rps:69454.22, l:48.64 },
+    {Test:"cpu100", R:75000, rps:74841.20, l:269.05 },
+    {Test:"cpu100", R:80000, rps:79379.55, l:89.54 },
+    {Test:"cpu100", R:85000, rps:83709.76, l:148.61 },
+    {Test:"cpu100", R:90000, rps:89817.40, l:41.44 },
+    {Test:"cpu100", R:95000, rps:94235.91, l:102.53 },
+    {Test:"cpu100", R:100000, rps:99798.23, l:86.4 },
+    {Test:"cpu100", R:105000, rps:104184.98, l:64.19 },
+    {Test:"cpu100", R:110000, rps:109148.32, l:125.31 },
+    {Test:"cpu100", R:115000, rps:114755.04, l:67.01 },
+    {Test:"cpu100", R:120000, rps:119742.38, l:174.08 },
+    {Test:"cpu100", R:125000, rps:124635.41, l:751.1 },
+    {Test:"cpu100", R:130000, rps:127735.84, l:1950 },
+    {Test:"cpu100", R:135000, rps:133781.77, l:1060 },
+    {Test:"cpu100", R:140000, rps:138568.49, l:1350 },
+    {Test:"cpu100", R:145000, rps:143412.13, l:704.51 },
+    {Test:"cpu100", R:150000, rps:149229.33, l:1630 },
+    /*
+
+    {Test:"cpu100", R:3, rps:3.20, l:104.32},
+    {Test:"cpu100", R:6, rps:6.13, l:103.68},
+    {Test:"cpu100", R:9, rps:9.06, l:102.4},
+    {Test:"cpu100", R:12, rps:11.99, l:111.61},
+    {Test:"cpu100", R:15, rps:15.20, l:106.94},
+    {Test:"cpu100", R:18, rps:18.12, l:105.21},
+    {Test:"cpu100", R:21, rps:21.06, l:107.84},
+    {Test:"cpu100", R:24, rps:23.99, l:109.69},
+    {Test:"cpu100", R:27, rps:26.93, l:105.92},
+    {Test:"cpu100", R:30, rps:30.12, l:103.17},
+    {Test:"cpu100", R:33, rps:33.06, l:108.93},
+    {Test:"cpu100", R:36, rps:35.96, l:104.51},
+    {Test:"cpu100", R:39, rps:38.93, l:104.32},
+    {Test:"cpu100", R:42, rps:42.09, l:129.41},
+    {Test:"cpu100", R:45, rps:45.05, l:106.43},
+    {Test:"cpu100", R:48, rps:47.97, l:107.84},
+    {Test:"cpu100", R:51, rps:50.89, l:114.24},
+    {Test:"cpu100", R:54, rps:53.81, l:105.92},
+    {Test:"cpu100", R:57, rps:57.05, l:113.28},
+    {Test:"cpu100", R:60, rps:59.98, l:121.47},
+    {Test:"cpu100", R:63, rps:62.92, l:112.13},
+    {Test:"cpu100", R:66, rps:65.85, l:112.64},
+    {Test:"cpu100", R:69, rps:68.78, l:116.48},
+    {Test:"cpu100", R:72, rps:71.96, l:115.9},
+    {Test:"cpu100", R:75, rps:74.87, l:113.79},
+    {Test:"cpu100", R:78, rps:77.81, l:127.17},
+    {Test:"cpu100", R:81, rps:78.98, l:829.44},
+    {Test:"cpu100", R:84, rps:79.18, l:1770},
+    {Test:"cpu100", R:87, rps:78.11, l:3170},
+    */
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["cpu100"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>
