@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"nginx", R:10000, rps:9861.73, l:17.41 },
+{ Test:"nginx", R:15000, rps:14883.18, l:63.94 },
+{ Test:"nginx", R:20000, rps:19845.02, l:18.77 },
+{ Test:"nginx", R:25000, rps:24806.77, l:15.44 },
+{ Test:"nginx", R:30000, rps:29940.61, l:21.22 },
+{ Test:"nginx", R:35000, rps:34728.20, l:22.35 },
+{ Test:"nginx", R:40000, rps:39689.15, l:13.74 },
+{ Test:"nginx", R:45000, rps:44911.91, l:138.24 },
+{ Test:"nginx", R:50000, rps:49411.84, l:98.75 },
+{ Test:"nginx", R:55000, rps:54571.63, l:58.24 },
+{ Test:"nginx", R:60000, rps:59536.64, l:109.82 },
+{ Test:"nginx", R:65000, rps:64103.83, l:151.04 },
+{ Test:"nginx", R:70000, rps:69856.86, l:20.06 },
+{ Test:"nginx", R:75000, rps:74420.59, l:488.19 },
+{ Test:"nginx", R:80000, rps:79164.30, l:75.26 },
+{ Test:"nginx", R:85000, rps:84825.11, l:231.93 },
+{ Test:"nginx", R:90000, rps:89819.73, l:1300 },
+{ Test:"nginx", R:95000, rps:93960.22, l:279.3 },
+{ Test:"nginx", R:100000, rps:99208.33, l:13.43 },
+{ Test:"nginx", R:105000, rps:103571.43, l:259.07 },
+{ Test:"nginx", R:110000, rps:109158.52, l:214.01 },
+{ Test:"nginx", R:115000, rps:114109.83, l:40.67 },
+{ Test:"nginx", R:120000, rps:119751.99, l:356.1 },
+{ Test:"nginx", R:125000, rps:121380.71, l:320.51 },
+{ Test:"nginx", R:130000, rps:128225.77, l:367.87 },
+{ Test:"nginx", R:135000, rps:134703.96, l:1060 },
+{ Test:"nginx", R:140000, rps:137993.40, l:420.61 },
+{ Test:"nginx", R:145000, rps:144531.75, l:465.15 },
+{ Test:"nginx", R:150000, rps:148589.52, l:2070 },
+{ Test:"nginx", R:155000, rps:151383.67, l:809.98 },
+{ Test:"nginx", R:160000, rps:159380.99, l:497.15 },
+{ Test:"nginx", R:165000, rps:156462.03, l:3190 },
+{ Test:"nginx", R:170000, rps:166930.79, l:1170 },
+{ Test:"nginx", R:175000, rps:168383.38, l:2550 },
+{ Test:"nginx", R:180000, rps:162903.08, l:5620 },
+{ Test:"nginx", R:185000, rps:164320.12, l:4180 },
+{ Test:"nginx", R:190000, rps:167228.51, l:5440 },
+{ Test:"nginx", R:195000, rps:171047.87, l:5940 },
+{ Test:"nginx", R:200000, rps:166070.81, l:5890 },
+{ Test:"nginx", R:205000, rps:156764.44, l:9890 },
+{ Test:"nginx", R:210000, rps:159975.52, l:10130 },
+{ Test:"nginx", R:215000, rps:171709.08, l:8270 },
+{ Test:"nginx", R:220000, rps:166262.47, l:9630 },
+{ Test:"nginx", R:225000, rps:162749.55, l:11600 },
+{ Test:"nginx", R:230000, rps:167719.91, l:11120 },
+{ Test:"nginx", R:235000, rps:170464.90, l:11090 },
+{ Test:"nginx", R:240000, rps:164531.72, l:12790 },
+{ Test:"nginx", R:245000, rps:165252.21, l:13120 },
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["nginx"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>

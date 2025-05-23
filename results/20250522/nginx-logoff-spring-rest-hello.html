@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"nginx-spring-rest-hello", R:10000, rps:9981.48, l:821.76 },
+{ Test:"nginx-spring-rest-hello", R:15000, rps:14876.50, l:1240 },
+{ Test:"nginx-spring-rest-hello", R:20000, rps:19919.82, l:1700 },
+{ Test:"nginx-spring-rest-hello", R:25000, rps:22299.70, l:7760 },
+{ Test:"nginx-spring-rest-hello", R:30000, rps:23167.30, l:11940 },
+{ Test:"nginx-spring-rest-hello", R:35000, rps:22286.75, l:16200 },
+{ Test:"nginx-spring-rest-hello", R:40000, rps:18855.83, l:22450 },
+{ Test:"nginx-spring-rest-hello", R:45000, rps:21736.96, l:22300 },
+{ Test:"nginx-spring-rest-hello", R:50000, rps:22025.07, l:23220 },
+{ Test:"nginx-spring-rest-hello", R:55000, rps:21584.91, l:25030 },
+{ Test:"nginx-spring-rest-hello", R:60000, rps:21947.41, l:25660 },
+{ Test:"nginx-spring-rest-hello", R:65000, rps:23150.88, l:26000 },
+{ Test:"nginx-spring-rest-hello", R:70000, rps:22797.54, l:27150 },
+{ Test:"nginx-spring-rest-hello", R:75000, rps:20450.12, l:29030 },
+{ Test:"nginx-spring-rest-hello", R:80000, rps:19889.71, l:29750 },
+{ Test:"nginx-spring-rest-hello", R:85000, rps:20384.34, l:30210 },
+{ Test:"nginx-spring-rest-hello", R:90000, rps:22176.69, l:30050 },
+{ Test:"nginx-spring-rest-hello", R:95000, rps:23067.06, l:30160 },
+{ Test:"nginx-spring-rest-hello", R:100000, rps:21694.97, l:31310 },
+{ Test:"nginx-spring-rest-hello", R:105000, rps:22232.15, l:31200 },
+{ Test:"nginx-spring-rest-hello", R:110000, rps:21324.84, l:32060 },
+{ Test:"nginx-spring-rest-hello", R:115000, rps:15414.80, l:34570 },
+{ Test:"nginx-spring-rest-hello", R:120000, rps:20524.87, l:32820 },
+{ Test:"nginx-spring-rest-hello", R:125000, rps:21253.77, l:32980 },
+{ Test:"nginx-spring-rest-hello", R:130000, rps:21860.01, l:33060 },
+{ Test:"nginx-spring-rest-hello", R:135000, rps:21268.17, l:33550 },
+{ Test:"nginx-spring-rest-hello", R:140000, rps:24048.84, l:32920 },
+{ Test:"nginx-spring-rest-hello", R:145000, rps:22307.91, l:33650 },
+{ Test:"nginx-spring-rest-hello", R:150000, rps:21594.05, l:34050 },
+{ Test:"nginx-spring-rest-hello", R:155000, rps:23319.84, l:33780 },
+{ Test:"nginx-spring-rest-hello", R:160000, rps:22213.33, l:34240 },
+{ Test:"nginx-spring-rest-hello", R:165000, rps:23030.49, l:34180 },
+{ Test:"nginx-spring-rest-hello", R:170000, rps:23936.16, l:33950 },
+{ Test:"nginx-spring-rest-hello", R:175000, rps:22376.56, l:34410 },
+{ Test:"nginx-spring-rest-hello", R:180000, rps:23360.14, l:34500 },
+{ Test:"nginx-spring-rest-hello", R:185000, rps:22084.31, l:35030 },
+{ Test:"nginx-spring-rest-hello", R:190000, rps:18548.30, l:35750 },
+{ Test:"nginx-spring-rest-hello", R:195000, rps:21502.34, l:35160 },
+{ Test:"nginx-spring-rest-hello", R:200000, rps:22432.95, l:35160 },
+{ Test:"nginx-spring-rest-hello", R:205000, rps:22036.24, l:35420 },
+{ Test:"nginx-spring-rest-hello", R:210000, rps:23093.65, l:35290 },
+{ Test:"nginx-spring-rest-hello", R:215000, rps:22694.64, l:35490 },
+{ Test:"nginx-spring-rest-hello", R:220000, rps:20621.94, l:35880 },
+{ Test:"nginx-spring-rest-hello", R:225000, rps:22462.41, l:35290 },
+{ Test:"nginx-spring-rest-hello", R:230000, rps:21035.92, l:36080 },
+{ Test:"nginx-spring-rest-hello", R:235000, rps:21415.38, l:36040 },
+{ Test:"nginx-spring-rest-hello", R:240000, rps:21672.97, l:36040 },
+{ Test:"nginx-spring-rest-hello", R:245000, rps:23078.00, l:35750 },
+{ Test:"nginx-spring-rest-hello", R:250000, rps:24417.72, l:35750 },
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["nginx-spring-rest-hello"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>
