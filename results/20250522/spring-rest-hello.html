@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"spring-rest-hello", R:10000, rps:9981.40, l:16.85 },
+{ Test:"spring-rest-hello", R:15000, rps:14884.06, l:14.04 },
+{ Test:"spring-rest-hello", R:20000, rps:19844.82, l:466.17 },
+{ Test:"spring-rest-hello", R:25000, rps:24934.13, l:333.82 },
+{ Test:"spring-rest-hello", R:30000, rps:29945.26, l:25.63 },
+{ Test:"spring-rest-hello", R:35000, rps:32617.44, l:4820 },
+{ Test:"spring-rest-hello", R:40000, rps:39073.54, l:855.04 },
+{ Test:"spring-rest-hello", R:45000, rps:44895.18, l:376.58 },
+{ Test:"spring-rest-hello", R:50000, rps:47938.38, l:2970 },
+{ Test:"spring-rest-hello", R:55000, rps:47546.76, l:5090 },
+{ Test:"spring-rest-hello", R:60000, rps:42764.52, l:11490 },
+{ Test:"spring-rest-hello", R:65000, rps:39885.66, l:15870 },
+{ Test:"spring-rest-hello", R:70000, rps:42674.42, l:14790 },
+{ Test:"spring-rest-hello", R:75000, rps:38019.63, l:18740 },
+{ Test:"spring-rest-hello", R:80000, rps:41182.59, l:19510 },
+{ Test:"spring-rest-hello", R:85000, rps:45718.96, l:18240 },
+{ Test:"spring-rest-hello", R:90000, rps:45436.67, l:19430 },
+{ Test:"spring-rest-hello", R:95000, rps:44430.26, l:20940 },
+{ Test:"spring-rest-hello", R:100000, rps:47210.08, l:20500 },
+{ Test:"spring-rest-hello", R:105000, rps:46731.62, l:22020 },
+{ Test:"spring-rest-hello", R:110000, rps:34851.66, l:26870 },
+{ Test:"spring-rest-hello", R:115000, rps:44541.50, l:24050 },
+{ Test:"spring-rest-hello", R:120000, rps:46553.28, l:24150 },
+{ Test:"spring-rest-hello", R:125000, rps:41690.63, l:26440 },
+{ Test:"spring-rest-hello", R:130000, rps:42391.51, l:26590 },
+{ Test:"spring-rest-hello", R:135000, rps:47573.88, l:25670 },
+{ Test:"spring-rest-hello", R:140000, rps:42346.52, l:27640 },
+{ Test:"spring-rest-hello", R:145000, rps:44955.34, l:27030 },
+{ Test:"spring-rest-hello", R:150000, rps:40553.13, l:28840 },
+{ Test:"spring-rest-hello", R:155000, rps:44872.42, l:28050 },
+{ Test:"spring-rest-hello", R:160000, rps:45237.60, l:28380 },
+{ Test:"spring-rest-hello", R:165000, rps:47490.03, l:28250 },
+{ Test:"spring-rest-hello", R:170000, rps:48680.97, l:27820 },
+{ Test:"spring-rest-hello", R:175000, rps:50516.53, l:27870 },
+{ Test:"spring-rest-hello", R:180000, rps:51260.67, l:28280 },
+{ Test:"spring-rest-hello", R:185000, rps:36959.15, l:31650 },
+{ Test:"spring-rest-hello", R:190000, rps:44703.30, l:30130 },
+{ Test:"spring-rest-hello", R:195000, rps:48050.66, l:29700 },
+{ Test:"spring-rest-hello", R:200000, rps:38328.80, l:32080 },
+{ Test:"spring-rest-hello", R:205000, rps:43542.81, l:30800 },
+{ Test:"spring-rest-hello", R:210000, rps:44970.80, l:31150 },
+{ Test:"spring-rest-hello", R:215000, rps:42388.17, l:31670 },
+{ Test:"spring-rest-hello", R:220000, rps:40812.76, l:31820 },
+{ Test:"spring-rest-hello", R:225000, rps:42605.11, l:31950 },
+{ Test:"spring-rest-hello", R:230000, rps:39258.28, l:32750 },
+{ Test:"spring-rest-hello", R:235000, rps:50293.70, l:30970 },
+{ Test:"spring-rest-hello", R:240000, rps:51612.68, l:31100 },
+{ Test:"spring-rest-hello", R:245000, rps:54324.78, l:30670 },
+{ Test:"spring-rest-hello", R:250000, rps:53537.42, l:31000 },
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["spring-rest-hello"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>

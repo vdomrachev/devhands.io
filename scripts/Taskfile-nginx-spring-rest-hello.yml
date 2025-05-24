@@ -46,4 +46,4 @@ tasks:
     desc: 'lsmt - extract results'
     dir: '{{.APP}}'
     cmds:
-      - /local/lsmt/lsmt --extract --origin=wrk --files="results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt" --out="{ Test:\"nginx-spring-rest-hello\", R:{{"{{R}}"}}, rps:{{"{{rps}}"}}, l:{{"{{latency_p99}}"}} }," | sort -t ',' -n -k2.8
+      - /local/lsmt/lsmt --extract --origin=wrk --files="results/wrk_c{{.CONNECTIONS}}_t{{.THREADS}}_R*.txt" --out="{ Test:\"nginx-spring-rest-hello\", R:{{"{{R}}"}}, rps:{{"{{rps}}"}}, l:{{"{{latency_p99}}"}} }," | sort -t ',' -n -k2.4

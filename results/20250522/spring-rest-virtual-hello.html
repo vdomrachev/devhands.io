@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"spring-rest-virtual-hello", R:10000, rps:9923.45, l:12.97 },
+{ Test:"spring-rest-virtual-hello", R:12500, rps:12403.51, l:401.66 },
+{ Test:"spring-rest-virtual-hello", R:15000, rps:14972.11, l:10.51 },
+{ Test:"spring-rest-virtual-hello", R:17500, rps:17365.27, l:17.14 },
+{ Test:"spring-rest-virtual-hello", R:20000, rps:19961.79, l:27.25 },
+{ Test:"spring-rest-virtual-hello", R:22500, rps:22457.74, l:25.52 },
+{ Test:"spring-rest-virtual-hello", R:25000, rps:24951.64, l:34.05 },
+{ Test:"spring-rest-virtual-hello", R:27500, rps:27446.65, l:645.12 },
+{ Test:"spring-rest-virtual-hello", R:30000, rps:29769.15, l:13.95 },
+{ Test:"spring-rest-virtual-hello", R:32500, rps:32249.38, l:1200 },
+{ Test:"spring-rest-virtual-hello", R:35000, rps:34527.14, l:1010 },
+{ Test:"spring-rest-virtual-hello", R:37500, rps:37426.20, l:94.08 },
+{ Test:"spring-rest-virtual-hello", R:40000, rps:39685.67, l:196.48 },
+{ Test:"spring-rest-virtual-hello", R:42500, rps:42147.70, l:1460 },
+{ Test:"spring-rest-virtual-hello", R:45000, rps:44882.29, l:502.53 },
+{ Test:"spring-rest-virtual-hello", R:47500, rps:47381.20, l:2210 },
+{ Test:"spring-rest-virtual-hello", R:50000, rps:46500.06, l:7640 },
+{ Test:"spring-rest-virtual-hello", R:52500, rps:51570.91, l:5610 },
+{ Test:"spring-rest-virtual-hello", R:55000, rps:52886.22, l:5350 },
+{ Test:"spring-rest-virtual-hello", R:57500, rps:54492.36, l:6030 },
+{ Test:"spring-rest-virtual-hello", R:60000, rps:54503.33, l:9320 },
+{ Test:"spring-rest-virtual-hello", R:62500, rps:55798.16, l:8310 },
+{ Test:"spring-rest-virtual-hello", R:65000, rps:53977.36, l:8440 },
+{ Test:"spring-rest-virtual-hello", R:67500, rps:55840.53, l:11040 },
+{ Test:"spring-rest-virtual-hello", R:70000, rps:49771.21, l:17860 },
+{ Test:"spring-rest-virtual-hello", R:72500, rps:55156.42, l:14810 },
+{ Test:"spring-rest-virtual-hello", R:75000, rps:53096.64, l:14860 },
+{ Test:"spring-rest-virtual-hello", R:77500, rps:48592.50, l:16200 },
+{ Test:"spring-rest-virtual-hello", R:80000, rps:51507.23, l:18530 },
+{ Test:"spring-rest-virtual-hello", R:82500, rps:54440.38, l:18660 },
+{ Test:"spring-rest-virtual-hello", R:85000, rps:54429.84, l:16940 },
+{ Test:"spring-rest-virtual-hello", R:87500, rps:50722.07, l:20640 },
+{ Test:"spring-rest-virtual-hello", R:90000, rps:58439.07, l:15730 },
+{ Test:"spring-rest-virtual-hello", R:92500, rps:55092.90, l:17350 },
+{ Test:"spring-rest-virtual-hello", R:95000, rps:51596.19, l:18960 },
+{ Test:"spring-rest-virtual-hello", R:97500, rps:53207.00, l:19690 },
+{ Test:"spring-rest-virtual-hello", R:100000, rps:55181.17, l:19380 },
+{ Test:"spring-rest-virtual-hello", R:102500, rps:53404.78, l:20120 },
+{ Test:"spring-rest-virtual-hello", R:105000, rps:53671.63, l:20870 },
+{ Test:"spring-rest-virtual-hello", R:107500, rps:51781.26, l:23740 },
+{ Test:"spring-rest-virtual-hello", R:110000, rps:53913.54, l:21770 },
+{ Test:"spring-rest-virtual-hello", R:112500, rps:55440.26, l:23310 },
+{ Test:"spring-rest-virtual-hello", R:115000, rps:58638.15, l:21450 },
+{ Test:"spring-rest-virtual-hello", R:117500, rps:103007.75, l:6000 },
+{ Test:"spring-rest-virtual-hello", R:120000, rps:105784.13, l:5980 },
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["spring-rest-virtual-hello"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>
