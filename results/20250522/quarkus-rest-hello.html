@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"quarkus-rest-hello", R:10000, rps:9981.75, l:15.52 },
+{ Test:"quarkus-rest-hello", R:12500, rps:12403.39, l:14.95 },
+{ Test:"quarkus-rest-hello", R:15000, rps:14971.73, l:13.97 },
+{ Test:"quarkus-rest-hello", R:17500, rps:17365.75, l:403.45 },
+{ Test:"quarkus-rest-hello", R:20000, rps:19961.33, l:9.68 },
+{ Test:"quarkus-rest-hello", R:22500, rps:22454.78, l:27.52 },
+{ Test:"quarkus-rest-hello", R:25000, rps:24661.79, l:16.48 },
+{ Test:"quarkus-rest-hello", R:27500, rps:27447.04, l:11.65 },
+{ Test:"quarkus-rest-hello", R:30000, rps:29768.57, l:17.71 },
+{ Test:"quarkus-rest-hello", R:32500, rps:32249.19, l:29.01 },
+{ Test:"quarkus-rest-hello", R:35000, rps:34527.79, l:13.5 },
+{ Test:"quarkus-rest-hello", R:37500, rps:37426.80, l:791.04 },
+{ Test:"quarkus-rest-hello", R:40000, rps:39688.54, l:22.29 },
+{ Test:"quarkus-rest-hello", R:42500, rps:42165.40, l:18.7 },
+{ Test:"quarkus-rest-hello", R:45000, rps:44648.60, l:213.25 },
+{ Test:"quarkus-rest-hello", R:47500, rps:47124.89, l:15.37 },
+{ Test:"quarkus-rest-hello", R:50000, rps:49613.67, l:13.39 },
+{ Test:"quarkus-rest-hello", R:52500, rps:52094.00, l:219.13 },
+{ Test:"quarkus-rest-hello", R:55000, rps:54572.65, l:1190 },
+{ Test:"quarkus-rest-hello", R:57500, rps:57385.65, l:15.69 },
+{ Test:"quarkus-rest-hello", R:60000, rps:59879.30, l:456.19 },
+{ Test:"quarkus-rest-hello", R:62500, rps:62017.32, l:89.98 },
+{ Test:"quarkus-rest-hello", R:65000, rps:64871.24, l:13.03 },
+{ Test:"quarkus-rest-hello", R:67500, rps:66976.34, l:633.34 },
+{ Test:"quarkus-rest-hello", R:70000, rps:69862.35, l:144.38 },
+{ Test:"quarkus-rest-hello", R:72500, rps:72359.15, l:19.71 },
+{ Test:"quarkus-rest-hello", R:75000, rps:74853.26, l:1010 },
+{ Test:"quarkus-rest-hello", R:77500, rps:76454.14, l:28.03 },
+{ Test:"quarkus-rest-hello", R:80000, rps:79842.65, l:8.8 },
+{ Test:"quarkus-rest-hello", R:82500, rps:82337.25, l:56.93 },
+{ Test:"quarkus-rest-hello", R:85000, rps:84830.15, l:36.48 },
+{ Test:"quarkus-rest-hello", R:87500, rps:87328.15, l:14.71 },
+{ Test:"quarkus-rest-hello", R:90000, rps:89817.89, l:120.25 },
+{ Test:"quarkus-rest-hello", R:92500, rps:91780.24, l:1560 },
+{ Test:"quarkus-rest-hello", R:95000, rps:93156.71, l:11.45 },
+{ Test:"quarkus-rest-hello", R:97500, rps:96744.76, l:477.7 },
+{ Test:"quarkus-rest-hello", R:100000, rps:99193.17, l:592.38 },
+{ Test:"quarkus-rest-hello", R:102500, rps:101705.84, l:20.64 },
+{ Test:"quarkus-rest-hello", R:105000, rps:104781.24, l:592.9 },
+{ Test:"quarkus-rest-hello", R:107500, rps:107274.59, l:519.42 },
+{ Test:"quarkus-rest-hello", R:110000, rps:109784.82, l:56.48 },
+{ Test:"quarkus-rest-hello", R:112500, rps:110967.22, l:6240 },
+{ Test:"quarkus-rest-hello", R:115000, rps:114759.69, l:1020 },
+{ Test:"quarkus-rest-hello", R:117500, rps:116585.74, l:62.56 },
+{ Test:"quarkus-rest-hello", R:120000, rps:119761.93, l:613.89 },
+{ Test:"quarkus-rest-hello", R:122500, rps:121552.17, l:611.33 },
+{ Test:"quarkus-rest-hello", R:125000, rps:124032.80, l:34.78 },
+{ Test:"quarkus-rest-hello", R:127500, rps:126515.76, l:819.2 },
+{ Test:"quarkus-rest-hello", R:130000, rps:123874.80, l:2470 },
+{ Test:"quarkus-rest-hello", R:132500, rps:131427.90, l:73.73 },
+{ Test:"quarkus-rest-hello", R:135000, rps:134667.09, l:533.5 },
+{ Test:"quarkus-rest-hello", R:137500, rps:137231.09, l:707.58 },
+{ Test:"quarkus-rest-hello", R:140000, rps:138906.99, l:52.32 },
+{ Test:"quarkus-rest-hello", R:142500, rps:141384.29, l:525.31 },
+{ Test:"quarkus-rest-hello", R:145000, rps:143877.29, l:850.94 },
+{ Test:"quarkus-rest-hello", R:147500, rps:147162.11, l:112 },
+{ Test:"quarkus-rest-hello", R:150000, rps:148375.16, l:4020 },
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["quarkus-rest-hello"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>
