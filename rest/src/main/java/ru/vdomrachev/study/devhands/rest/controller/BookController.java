@@ -148,6 +148,17 @@ public class BookController {
         return new ResponseEntity<>(bookDtoList, new HttpHeaders(), HttpStatus.OK);
     }
 
+    @GetMapping("/random/rows/{rows}/limit/{limit}/cached/multi")
+    public ResponseEntity<List<BookDto>> getRandomBooksCachedMulti(@PathVariable Integer rows, @PathVariable Integer limit) {
+        List<Book> books = service.getRandomBooksCachedMulti(rows, limit);
+
+        List<BookDto> bookDtoList = books.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(bookDtoList, new HttpHeaders(), HttpStatus.OK);
+    }
+
     private List<BookDto> getBookDtos(List<Book> books) {
         return books.stream()
                 .map(mapper::toDto)

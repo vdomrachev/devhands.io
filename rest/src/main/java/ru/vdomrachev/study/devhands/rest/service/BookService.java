@@ -1,6 +1,7 @@
 package ru.vdomrachev.study.devhands.rest.service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import ru.vdomrachev.study.devhands.rest.entity.Book;
@@ -22,13 +25,16 @@ public class BookService {
     private final BookRepository repository;
     @Lazy @Autowired
     private BookService service;
-    
+
+    @Autowired
+    private RedisTemplate<String, Book> redisTemplate;
+
     public List<Book> getRandomBooks(Integer rows, Integer limit) {
         return repository.findRandomBooks(rows, limit);
     }
 
     public List<Book> getRandomBooksCached(Integer rows, Integer limit) {
-        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
+        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 0, rows);
         List<Book> books = new ArrayList<>();
         for (Long id : ids) {
             Optional<Book> bookOptional = service.findByIdCached(id);
@@ -37,11 +43,21 @@ public class BookService {
         return books;
     }
 
-    private Set<Long> generateUniqueRandomNumbersFromDiapason(int limit, int start, int end) {
+    public List<Book> multiGetValues(List<String> keys) {
+        ValueOperations<String, Book> ops = redisTemplate.opsForValue();
+        return ops.multiGet(keys);
+    }
+
+    public List<Book> getRandomBooksCachedMulti(Integer rows, Integer limit) {
+        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 0, rows);
+        return multiGetValues(ids.stream().map(id -> "books::" + id.toString()).toList());
+    }
+
+    private List<Long> generateUniqueRandomNumbersFromDiapason(int limit, int start, int end) {
         if (limit > end - start) {
             throw new IllegalArgumentException("Limit is bigger than diapason");
         } else {
-            Set<Long> ids = new HashSet<>();
+            List<Long> ids = new ArrayList<>();
             while (ids.size() < limit) {
                 ids.add((long) (Math.random() * (end - start) + start));
             }
@@ -79,4 +95,5 @@ public class BookService {
     public Optional<Book> findById(Long id) {
         return repository.findById(id);
     }
+
 }
