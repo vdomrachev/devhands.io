@@ -1,5 +1,7 @@
 package ru.vdomrachev.study.devhands.rest.controller;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -33,6 +35,8 @@ public class BookController {
     private final BookMapper mapper;
 
     private final Random random = new Random(42);
+
+    ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
     @GetMapping("/hello")
     public String hello() {
@@ -70,12 +74,16 @@ public class BookController {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + interval;
-        while (System.currentTimeMillis() < endTime) {
-            int randomNumber = random.nextInt();
-            String randomString = String.valueOf(randomNumber);
-            md.digest(randomString.getBytes());
+
+        long userStatTime = threadBean.getCurrentThreadUserTime(); // время в пользовательском режиме в наносекундах
+
+        long endTime = userStatTime + interval * 1_000_000;
+        while (threadBean.getCurrentThreadUserTime() < endTime) {
+            for (int i = 0; i < 10000; i++) {
+                int randomNumber = random.nextInt();
+                String randomString = String.valueOf(randomNumber);
+                md.digest(randomString.getBytes());
+            }
         }
     }
 
