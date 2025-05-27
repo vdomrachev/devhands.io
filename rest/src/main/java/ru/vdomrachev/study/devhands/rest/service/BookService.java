@@ -1,9 +1,6 @@
 package ru.vdomrachev.study.devhands.rest.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +28,16 @@ public class BookService {
     }
 
     public List<Book> getRandomBooksCached(Integer rows, Integer limit) {
-        Set<Long> ids = generateUniqueRandomNyumbersFromDiapason(limit, 1, rows);
-        return repository.findAllById(ids);
+        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
+        List<Book> books = new ArrayList<>();
+        for (Long id : ids) {
+            Optional<Book> bookOptional = service.findByIdCached(id);
+            bookOptional.ifPresent(books::add);
+        }
+        return books;
     }
 
-    private Set<Long> generateUniqueRandomNyumbersFromDiapason(int limit, int start, int end) {
+    private Set<Long> generateUniqueRandomNumbersFromDiapason(int limit, int start, int end) {
         if (limit > end - start) {
             throw new IllegalArgumentException("Limit is bigger than diapason");
         } else {
