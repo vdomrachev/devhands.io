@@ -61,10 +61,19 @@ public class BookController {
         return "Hello from spring boot after " + timeout + " ms!";
     }
 
-    @GetMapping("/hello/consume/{interval}")
-    public String helloAndConsumeCpu(@PathVariable Long interval) throws InterruptedException {
-        consumeCpu(interval);
-        return "Hello from spring boot after " + interval + " ms!";
+    @GetMapping("/hello/consume/cpu/{cpu}/io/{io}")
+    public String helloAndConsumeCpu(@PathVariable Long cpu, @PathVariable Long io) throws InterruptedException {
+        consumeCpu(cpu);
+        consumeIo(io);
+        return "Hello from spring boot after " + cpu + " ms!";
+    }
+
+    private void consumeIo(Long io) {
+        try {
+            Thread.sleep(io);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void consumeCpu(Long interval) {

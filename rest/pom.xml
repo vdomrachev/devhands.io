@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0-SNAPSHOT</version>
+        <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.vdomrachev.study.devhands</groupId>
@@ -14,7 +14,7 @@
     <name>rest</name>
     <properties>
         <java.version>24</java.version>
-        <spring-boot.version>3.5.0-SNAPSHOT</spring-boot.version>
+        <spring-boot.version>3.5.0</spring-boot.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMdd-HHmmssSSS</maven.build.timestamp.format>
