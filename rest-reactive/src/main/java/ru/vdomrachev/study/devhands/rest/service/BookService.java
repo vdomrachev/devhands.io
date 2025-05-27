@@ -4,8 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
@@ -16,17 +15,17 @@ import ru.vdomrachev.study.devhands.rest.repository.BookRepository;
 @Service
 @RequiredArgsConstructor
 public class BookService {
-     
+
     private final BookRepository repository;
-    @Lazy @Autowired
-    private BookService service;
+    private final ReactiveHashOperations<String, Long, Book> hashOperations;
+    private static final String KEY = "book";
 
     public Mono<Book> retrieve(long id) {
         return repository.findById(id);
     }
 
     public Mono<Book> findRandom(int rows) {
-        long rand = (long)(Math.random() * rows) + 1;
+        long rand = (long) (Math.random() * rows) + 1;
         return repository.findById(rand);
     }
 
@@ -39,7 +38,7 @@ public class BookService {
         return repository.findAllById(ids);
     }
 
-    private Set<Long> generateUniqueRandomNyumbersFromDiapason(int limit,  int start, int end) {
+    private Set<Long> generateUniqueRandomNyumbersFromDiapason(int limit, int start, int end) {
         if (limit > end - start) {
             throw new IllegalArgumentException("Limit is bigger than diapason");
         } else {
@@ -49,5 +48,20 @@ public class BookService {
             }
             return ids;
         }
+    }
+
+    private Mono<Book> updateRedisCache(Book book) {
+        return hashOperations.put(KEY, book.getId(), book)
+                .thenReturn(book);
+    }
+
+    public Mono<Book> save(Book book) {
+        return save(book).flatMap(this::updateRedisCache);
+    }
+
+    public Mono<Book> retrieveCached(Long id) {
+        return hashOperations.get(KEY, id)
+                .switchIfEmpty(retrieve(id))
+                .flatMap(this::updateRedisCache);
     }
 }

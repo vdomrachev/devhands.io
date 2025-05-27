@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"spring-rest-consume", R:10, rps:12.74, l:482.56 },
+{ Test:"spring-rest-consume", R:20, rps:22.30, l:870.4 },
+{ Test:"spring-rest-consume", R:30, rps:31.85, l:826.88 },
+{ Test:"spring-rest-consume", R:40, rps:41.41, l:629.76 },
+{ Test:"spring-rest-consume", R:50, rps:50.94, l:854.53 },
+{ Test:"spring-rest-consume", R:60, rps:60.53, l:617.98 },
+{ Test:"spring-rest-consume", R:70, rps:70.08, l:670.21 },
+{ Test:"spring-rest-consume", R:80, rps:79.74, l:623.61 },
+{ Test:"spring-rest-consume", R:90, rps:89.47, l:611.84 },
+{ Test:"spring-rest-consume", R:100, rps:96.96, l:876.54 },
+{ Test:"spring-rest-consume", R:110, rps:108.94, l:616.45 },
+{ Test:"spring-rest-consume", R:120, rps:118.49, l:822.78 },
+{ Test:"spring-rest-consume", R:130, rps:127.37, l:856.58 },
+{ Test:"spring-rest-consume", R:140, rps:133.47, l:3200 },
+{ Test:"spring-rest-consume", R:150, rps:148.58, l:2390 },
+{ Test:"spring-rest-consume", R:160, rps:149.53, l:4600 },
+{ Test:"spring-rest-consume", R:170, rps:148.19, l:6260 },
+{ Test:"spring-rest-consume", R:180, rps:150.77, l:7260 },
+{ Test:"spring-rest-consume", R:190, rps:150.38, l:9290 },
+{ Test:"spring-rest-consume", R:200, rps:149.07, l:10480 },
+{ Test:"spring-rest-consume", R:210, rps:151.15, l:12090 },
+{ Test:"spring-rest-consume", R:220, rps:149.09, l:13480 },
+{ Test:"spring-rest-consume", R:230, rps:149.44, l:14160 },
+{ Test:"spring-rest-consume", R:240, rps:152.03, l:15430 },
+{ Test:"spring-rest-consume", R:250, rps:151.91, l:15890 },
+
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["spring-rest-consume"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>

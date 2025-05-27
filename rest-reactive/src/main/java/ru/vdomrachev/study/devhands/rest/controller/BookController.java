@@ -38,6 +38,11 @@ public class BookController {
         return service.retrieve(id).map(mapper::toDto);
     }
 
+    @GetMapping("/{id}/cached")
+    public Mono<BookDto> retrieveCached(@PathVariable Long id) {
+        return service.retrieveCached(id).map(mapper::toDto);
+    }
+
     @GetMapping("/random/{rows}")
     Mono<ResponseEntity<Book>> retrieveRandom(@PathVariable int rows) {
         return service.findRandom(rows)
