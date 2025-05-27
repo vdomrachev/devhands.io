@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"spring-rest-get-cached-1", R:5000, rps:4991.57, l:40.29 },
+{ Test:"spring-rest-get-cached-1", R:10000, rps:9981.72, l:854.53 },
+{ Test:"spring-rest-get-cached-1", R:15000, rps:14884.69, l:22.72 },
+{ Test:"spring-rest-get-cached-1", R:20000, rps:19841.04, l:602.62 },
+{ Test:"spring-rest-get-cached-1", R:25000, rps:20695.68, l:6710 },
+{ Test:"spring-rest-get-cached-1", R:30000, rps:22256.87, l:10490 },
+{ Test:"spring-rest-get-cached-1", R:35000, rps:21187.35, l:15170 },
+{ Test:"spring-rest-get-cached-1", R:40000, rps:21660.60, l:18010 },
+{ Test:"spring-rest-get-cached-1", R:45000, rps:22072.77, l:20040 },
+{ Test:"spring-rest-get-cached-1", R:50000, rps:23211.91, l:20970 },
+
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["spring-rest-get-cached-1"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>

@@ -120,7 +120,7 @@ public class BookController {
         return new ResponseEntity<>(mapper.toDto(book), new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/random/cached/rows/{rows}/")
+    @GetMapping("/random/rows/{rows}/cached")
     public ResponseEntity<BookDto> getRandomBookCached(@PathVariable Integer rows) {
         Book book = service.findRandomCached(rows);
         return new ResponseEntity<>(mapper.toDto(book), new HttpHeaders(), HttpStatus.OK);
@@ -129,6 +129,17 @@ public class BookController {
     @GetMapping("/random/rows/{rows}/limit/{limit}")
     public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Integer rows, @PathVariable Integer limit) {
         List<Book> books = service.getRandomBooks(rows, limit);
+
+        List<BookDto> bookDtoList = books.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(bookDtoList, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/random/rows/{rows}/limit/{limit}/cached")
+    public ResponseEntity<List<BookDto>> getRandomBooksCached(@PathVariable Integer rows, @PathVariable Integer limit) {
+        List<Book> books = service.getRandomBooksCached(rows, limit);
 
         List<BookDto> bookDtoList = books.stream()
                 .map(mapper::toDto)

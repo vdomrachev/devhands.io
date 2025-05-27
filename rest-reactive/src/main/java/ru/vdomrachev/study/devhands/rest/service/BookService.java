@@ -34,11 +34,16 @@ public class BookService {
     }
 
     public Flux<Book> getRandom(int rows, int limit) {
-        Set<Long> ids = generateUniqueRandomNyumbersFromDiapason(limit, 0, rows);
+        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
         return repository.findAllById(ids);
     }
 
-    private Set<Long> generateUniqueRandomNyumbersFromDiapason(int limit, int start, int end) {
+    public Flux<Book> getRandomCached(int rows, int limit) {
+        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
+        return Flux.fromIterable(ids).flatMap(this::retrieveCached);
+    }
+
+    private Set<Long> generateUniqueRandomNumbersFromDiapason(int limit, int start, int end) {
         if (limit > end - start) {
             throw new IllegalArgumentException("Limit is bigger than diapason");
         } else {

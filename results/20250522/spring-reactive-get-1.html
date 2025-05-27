@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<html><body>
+<!--style>
+body { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
+div { flex-basis: 45%; margin-top: 20px; }
+</style-->
+<div id="myplot"></div>
+<div id="bar"></div>
+<script type=module>
+    var mydata = [
+{ Test:"spring-rest-book-get-1", R:1000, rps:992.82, l:20.48 },
+{ Test:"spring-rest-book-get-1", R:2000, rps:1983.62, l:18.01 },
+{ Test:"spring-rest-book-get-1", R:3000, rps:2995.53, l:7.3 },
+{ Test:"spring-rest-book-get-1", R:4000, rps:3969.51, l:405.25 },
+{ Test:"spring-rest-book-get-1", R:5000, rps:4960.77, l:1180 },
+{ Test:"spring-rest-book-get-1", R:6000, rps:5989.58, l:10.77 },
+{ Test:"spring-rest-book-get-1", R:7000, rps:6987.53, l:382.46 },
+{ Test:"spring-rest-book-get-1", R:8000, rps:7937.94, l:414.72 },
+{ Test:"spring-rest-book-get-1", R:9000, rps:8983.47, l:16.58 },
+{ Test:"spring-rest-book-get-1", R:10000, rps:9922.46, l:519.68 },
+{ Test:"spring-rest-book-get-1", R:11000, rps:10882.21, l:1330 },
+{ Test:"spring-rest-book-get-1", R:12000, rps:11972.08, l:383.49 },
+{ Test:"spring-rest-book-get-1", R:13000, rps:9486.33, l:10530 },
+{ Test:"spring-rest-book-get-1", R:14000, rps:11006.19, l:8440 },
+{ Test:"spring-rest-book-get-1", R:15000, rps:12115.12, l:7440 },
+
+    ];
+
+
+    const plot = Plot.plot({
+      marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
+
+      color: {legend: true, domain: ["spring-rest-book-get-1"], range: ["orange", "darkblue", "darkgreen"]},
+      grid: true,
+      x: {label: "RPS (x1000)"},
+      y: {label: "Latency"},
+      inset: 10,
+
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(mydata, {x: "rps", y: "l", stroke: "Test"}),
+        Plot.dot(mydata, {x: "rps", y: "l", r: 2, fill: "#000", stroke: "Test"}),
+      ]
+    })
+
+    const div = document.querySelector("#myplot");
+    div.append(plot);
+
+</script></body></body></html>

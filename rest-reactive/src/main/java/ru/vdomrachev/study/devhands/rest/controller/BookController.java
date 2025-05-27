@@ -54,4 +54,9 @@ public class BookController {
         return service.getRandom(rows, limit);
     }
 
+    @GetMapping("/random/rows/{rows}/limit/{limit}/cached")
+    Flux<Book> getRandomCached(@PathVariable int rows, @PathVariable int limit) {
+        return service.getRandomCached(rows, limit);
+    }
+
 }
