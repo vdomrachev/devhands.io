@@ -10,25 +10,26 @@ div { flex-basis: 45%; margin-top: 20px; }
 <div id="bar"></div>
 <script type=module>
     var mydata = [
-{ Test:"spring-rest-get-1", R:1000, rps:978.54, l:134.27 },
-{ Test:"spring-rest-get-1", R:2000, rps:1997.28, l:15.99 },
-{ Test:"spring-rest-get-1", R:3000, rps:2977.94, l:57.57 },
-{ Test:"spring-rest-get-1", R:4000, rps:3916.00, l:450.82 },
-{ Test:"spring-rest-get-1", R:5000, rps:4933.65, l:18.9 },
-{ Test:"spring-rest-get-1", R:6000, rps:5989.63, l:792.06 },
-{ Test:"spring-rest-get-1", R:7000, rps:6812.11, l:304.89 },
-{ Test:"spring-rest-get-1", R:8000, rps:7938.56, l:1970 },
-{ Test:"spring-rest-get-1", R:9000, rps:8029.58, l:5190 },
-{ Test:"spring-rest-get-1", R:10000, rps:8989.98, l:3320 },
-{ Test:"spring-rest-get-1", R:11000, rps:8983.84, l:7590 },
-{ Test:"spring-rest-get-1", R:12000, rps:8587.67, l:11700 },
-    ];
+{ Test:"spring-rest-book-get-1", R:1000, rps:999.72, l:17.52 },
+{ Test:"spring-rest-book-get-1", R:2000, rps:1983.95, l:12.81 },
+{ Test:"spring-rest-book-get-1", R:3000, rps:2977.72, l:55.62 },
+{ Test:"spring-rest-book-get-1", R:4000, rps:3969.33, l:325.38 },
+{ Test:"spring-rest-book-get-1", R:5000, rps:4991.61, l:403.2 },
+{ Test:"spring-rest-book-get-1", R:6000, rps:5986.49, l:3180 },
+{ Test:"spring-rest-book-get-1", R:7000, rps:6752.75, l:985.6 },
+{ Test:"spring-rest-book-get-1", R:8000, rps:7939.29, l:115.58 },
+{ Test:"spring-rest-book-get-1", R:9000, rps:8598.75, l:2390 },
+{ Test:"spring-rest-book-get-1", R:10000, rps:9088.37, l:3190 },
+{ Test:"spring-rest-book-get-1", R:11000, rps:8537.65, l:9120 },
+{ Test:"spring-rest-book-get-1", R:12000, rps:9694.70, l:7300 },
+{ Test:"spring-rest-book-get-1", R:13000, rps:9184.91, l:10560 },
 
+    ];
 
     const plot = Plot.plot({
       marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
 
-      color: {legend: true, domain: ["spring-rest-get-1"], range: ["orange", "darkblue", "darkgreen"]},
+      color: {legend: true, domain: ["spring-rest-book-get-1"], range: ["orange", "darkblue", "darkgreen"]},
       grid: true,
       x: {label: "RPS (x1000)"},
       y: {label: "Latency"},

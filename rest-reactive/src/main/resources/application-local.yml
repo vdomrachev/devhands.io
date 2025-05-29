@@ -3,6 +3,14 @@ spring:
     url: r2dbc:postgresql://localhost:5432/demodb
     username: demo
     password: demo
+    pool:
+      enabled: true
+      initial-size: 20
+      max-size: 50          # Increased from 25
+      max-idle-time: 30s     # Close idle connections
+      max-acquire-time: 60s  # Timeout for acquiring connections
+      max-create-connection-time: 30s
+      validation-query: SELECT 1
   data:
     redis:
       host: localhost

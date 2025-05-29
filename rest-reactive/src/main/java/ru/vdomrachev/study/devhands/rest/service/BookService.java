@@ -1,9 +1,12 @@
 package ru.vdomrachev.study.devhands.rest.service;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import ru.vdomrachev.study.devhands.rest.repository.BookRepository;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
 
     private final BookRepository repository;
@@ -24,23 +28,57 @@ public class BookService {
         return repository.findById(id);
     }
 
-    public Mono<Book> findRandom(int rows) {
-        long rand = (long) (Math.random() * rows) + 1;
-        return repository.findById(rand);
+    public Mono<Book> findRandom() {
+        return repository.findRandomBook()
+                .timeout(Duration.ofSeconds(5))  // Prevent hanging connections
+                .retry(2)                        // Retry on transient failures
+                .onErrorResume(ex -> {
+                    log.error("Error fetching random books", ex);
+                    return Mono.empty();         // Graceful degradation
+                });
     }
 
     public Flux<Book> list() {
         return repository.findAll();
     }
 
-    public Flux<Book> getRandom(int rows, int limit) {
-        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
-        return repository.findAllById(ids);
+    public Flux<Book> getRandomBooks(long limit) {
+        return repository.getRandomBooks(limit)
+                .timeout(Duration.ofSeconds(5))  // Prevent hanging connections
+                .retry(2)                        // Retry on transient failures
+                .onErrorResume(ex -> {
+                    log.error("Error fetching random books", ex);
+                    return Flux.empty();         // Graceful degradation
+                });
+    }
+
+    public Flux<Book> getRandomBooks(int rows, int limit) {
+        return generateUniqueRandomIds(limit, 1, rows)
+                .collectList()
+                .flatMapMany(repository::findAllById);
     }
 
     public Flux<Book> getRandomCached(int rows, int limit) {
-        Set<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
-        return Flux.fromIterable(ids).flatMap(this::retrieveCached);
+        return generateUniqueRandomIds(limit, 1, rows)
+                .flatMap(this::retrieveCached);
+    }
+
+    public Flux<Long> generateUniqueRandomIds(int count, long minId, long maxId) {
+        if (count <= 0 || minId >= maxId || (maxId - minId + 1) < count) {
+            return Flux.error(new IllegalArgumentException("Cannot generate unique IDs with given range"));
+        }
+
+        return Flux.generate(
+                () -> ThreadLocalRandom.current().longs(minId, maxId + 1).distinct().limit(count).iterator(),
+                (iterator, sink) -> {
+                    if (iterator.hasNext()) {
+                        sink.next(iterator.next());
+                    } else {
+                        sink.complete();
+                    }
+                    return iterator;
+                }
+        );
     }
 
     private Set<Long> generateUniqueRandomNumbersFromDiapason(int limit, int start, int end) {

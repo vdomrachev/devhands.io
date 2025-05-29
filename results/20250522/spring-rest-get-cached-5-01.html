@@ -10,22 +10,13 @@ div { flex-basis: 45%; margin-top: 20px; }
 <div id="bar"></div>
 <script type=module>
     var mydata = [
-{ Test:"spring-rest-get-cached-1", R:5000, rps:4960.86, l:11.83 },
-{ Test:"spring-rest-get-cached-1", R:10000, rps:9975.73, l:18.82 },
-{ Test:"spring-rest-get-cached-1", R:15000, rps:14971.81, l:656.9 },
-{ Test:"spring-rest-get-cached-1", R:20000, rps:19845.05, l:31.61 },
-{ Test:"spring-rest-get-cached-1", R:25000, rps:24807.36, l:3300 },
-{ Test:"spring-rest-get-cached-1", R:30000, rps:29256.44, l:740.35 },
-{ Test:"spring-rest-get-cached-1", R:35000, rps:32595.79, l:2860 },
-{ Test:"spring-rest-get-cached-1", R:40000, rps:32526.95, l:7240 },
 
     ];
-
 
     const plot = Plot.plot({
       marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
 
-      color: {legend: true, domain: ["spring-rest-get-cached-1"], range: ["orange", "darkblue", "darkgreen"]},
+      color: {legend: true, domain: ["spring-rest-get-cached-5"], range: ["orange", "darkblue", "darkgreen"]},
       grid: true,
       x: {label: "RPS (x1000)"},
       y: {label: "Latency"},

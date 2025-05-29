@@ -10,22 +10,22 @@ div { flex-basis: 45%; margin-top: 20px; }
 <div id="bar"></div>
 <script type=module>
     var mydata = [
-{ Test:"spring-rest-get-cached-1", R:5000, rps:4960.86, l:11.83 },
-{ Test:"spring-rest-get-cached-1", R:10000, rps:9975.73, l:18.82 },
-{ Test:"spring-rest-get-cached-1", R:15000, rps:14971.81, l:656.9 },
-{ Test:"spring-rest-get-cached-1", R:20000, rps:19845.05, l:31.61 },
-{ Test:"spring-rest-get-cached-1", R:25000, rps:24807.36, l:3300 },
-{ Test:"spring-rest-get-cached-1", R:30000, rps:29256.44, l:740.35 },
-{ Test:"spring-rest-get-cached-1", R:35000, rps:32595.79, l:2860 },
-{ Test:"spring-rest-get-cached-1", R:40000, rps:32526.95, l:7240 },
-
+{ Test:"spring-rest-get-cached-multi-5", R:15000, rps:14970.34, l:23.23 },
+{ Test:"spring-rest-get-cached-multi-5", R:17000, rps:16868.51, l:3680 },
+{ Test:"spring-rest-get-cached-multi-5", R:19000, rps:18743.51, l:804.35 },
+{ Test:"spring-rest-get-cached-multi-5", R:21000, rps:20959.94, l:31.98 },
+{ Test:"spring-rest-get-cached-multi-5", R:23000, rps:22954.62, l:1420 },
+{ Test:"spring-rest-get-cached-multi-5", R:25000, rps:22587.47, l:3970 },
+{ Test:"spring-rest-get-cached-multi-5", R:27000, rps:24546.99, l:3960 },
+{ Test:"spring-rest-get-cached-multi-5", R:29000, rps:24000.69, l:6550 },
+{ Test:"spring-rest-get-cached-multi-5", R:31000, rps:20522.18, l:13160 },
+{ Test:"spring-rest-get-cached-multi-5", R:33000, rps:24440.68, l:10340 },
     ];
-
 
     const plot = Plot.plot({
       marginTop:    30, marginRight:  30, marginBottom: 40, marginLeft:   50,
 
-      color: {legend: true, domain: ["spring-rest-get-cached-1"], range: ["orange", "darkblue", "darkgreen"]},
+      color: {legend: true, domain: ["spring-rest-get-cached-multi-5"], range: ["orange", "darkblue", "darkgreen"]},
       grid: true,
       x: {label: "RPS (x1000)"},
       y: {label: "Latency"},

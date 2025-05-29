@@ -1,0 +1,39 @@
+# templates/nginx_baseline.conf.j2
+user {{ nginx_user }};
+worker_processes {{ worker_processes }};
+pid /run/nginx.pid;
+
+events {
+    worker_connections {{ worker_connections }};
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    sendfile {{ sendfile }};
+    tcp_nopush {{ tcp_nopush }};
+    tcp_nodelay {{ tcp_nodelay }};
+    keepalive_timeout {{ keepalive_timeout }};
+    keepalive_requests {{ keepalive_requests }};
+    types_hash_max_size 2048;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    access_log off;
+    error_log /var/log/nginx/error.log crit;
+
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+        index index.html;
+
+        server_name _;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}

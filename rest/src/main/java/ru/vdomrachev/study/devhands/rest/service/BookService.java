@@ -34,7 +34,7 @@ public class BookService {
     }
 
     public List<Book> getRandomBooksCached(Integer rows, Integer limit) {
-        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 0, rows);
+        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
         List<Book> books = new ArrayList<>();
         for (Long id : ids) {
             Optional<Book> bookOptional = service.findByIdCached(id);
@@ -49,7 +49,7 @@ public class BookService {
     }
 
     public List<Book> getRandomBooksCachedMulti(Integer rows, Integer limit) {
-        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 0, rows);
+        List<Long> ids = generateUniqueRandomNumbersFromDiapason(limit, 1, rows);
         return multiGetValues(ids.stream().map(id -> "books::" + id.toString()).toList());
     }
 
