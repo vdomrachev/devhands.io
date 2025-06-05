@@ -1,0 +1,10 @@
+=== Gzip Enabled Test ===
+Running 30s test @ http://localhost/
+  4 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   222.59us   87.27us   2.16ms   63.04%
+    Req/Sec    72.92k     6.73k   85.18k    71.83%
+  8707174 requests in 30.02s, 3.50GB read
+Requests/sec: 290022.52
+Transfer/sec:    119.21MB
+

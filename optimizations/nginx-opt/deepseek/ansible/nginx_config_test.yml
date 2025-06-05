@@ -1,0 +1,5 @@
+- name: Test worker_connections options
+  include_tasks: test_worker_connections.yml
+  loop: "{{ nginx_worker_connections_options }}"
+  loop_control:
+    loop_var: worker_connections

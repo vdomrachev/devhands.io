@@ -1,0 +1,20 @@
+=== Optimized Configuration Test ===
+Running 30s test @ http://localhost/
+  4 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   224.41us   88.66us   1.93ms   65.80%
+    Req/Sec    71.81k     7.10k   82.86k    72.50%
+  8574839 requests in 30.01s, 3.44GB read
+Requests/sec: 285696.90
+Transfer/sec:    117.43MB
+
+=== Optimized Configuration Test ===
+Running 30s test @ http://localhost/
+  4 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   228.50us   90.07us   1.97ms   64.41%
+    Req/Sec    70.58k     6.77k   83.00k    71.08%
+  8426220 requests in 30.02s, 3.38GB read
+Requests/sec: 280686.21
+Transfer/sec:    115.37MB
+

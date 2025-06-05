@@ -1,0 +1,5 @@
+- name: Test keepalive_timeout options
+  include_tasks: test_keepalive_timeout.yml
+  loop: "{{ nginx_keepalive_options }}"
+  loop_control:
+    loop_var: keepalive_timeout

@@ -1,0 +1,5 @@
+- name: Test multi_accept options
+  include_tasks: test_multi_accept.yml
+  loop: "{{ nginx_multi_accept_options }}"
+  loop_control:
+    loop_var: multi_accept

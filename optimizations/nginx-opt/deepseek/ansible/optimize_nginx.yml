@@ -1,0 +1,125 @@
+---
+- name: Optimize Ubuntu server for maximum Nginx RPS
+  hosts: all
+  become: yes
+  vars:
+    # Test parameters
+    wrk_threads: 4
+    wrk_connections: 100
+    wrk_duration: "30s"
+    test_url: "http://localhost/"
+
+    # Nginx tuning options to test
+    nginx_worker_processes_options: ["auto", "2", "4", "8"]
+    nginx_worker_connections_options: ["1024", "2048", "4096", "8192"]
+    nginx_keepalive_options: ["0", "10", "30", "60"]
+    nginx_multi_accept_options: ["off", "on"]
+
+    # System tuning options
+    sysctl_options:
+      - { name: "net.ipv4.tcp_tw_reuse", value: "1" }
+      - { name: "net.ipv4.tcp_fin_timeout", value: "30" }
+      - { name: "net.ipv4.tcp_max_syn_backlog", value: "4096" }
+      - { name: "net.core.somaxconn", value: "4096" }
+      - { name: "net.ipv4.tcp_no_metrics_save", value: "1" }
+      - { name: "net.core.rmem_max", value: "16777216" }
+      - { name: "net.core.wmem_max", value: "16777216" }
+      - { name: "net.ipv4.tcp_rmem", value: "4096 87380 16777216" }
+      - { name: "net.ipv4.tcp_wmem", value: "4096 65536 16777216" }
+
+    # Best configuration will be stored here
+    best_config: {}
+    best_rps: 0
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - nginx
+        - build-essential
+        - git
+        - htop
+        - sysstat
+        - tuned
+        - tuned-utils
+
+    - name: Install wrk (HTTP benchmarking tool)
+      git:
+        repo: https://github.com/wg/wrk.git
+        dest: /tmp/wrk
+        version: master
+      register: wrk_clone
+
+    - name: Build wrk
+      make:
+        chdir: /tmp/wrk
+        target: install
+      when: wrk_clone.changed
+
+    - name: Create directory for test results
+      file:
+        path: /var/log/nginx_optimization
+        state: directory
+        mode: '0755'
+
+    - name: Apply system tuning parameters
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: yes
+      loop: "{{ sysctl_options }}"
+
+    - name: Configure tuned profile for network throughput
+      command: tuned-adm profile throughput-performance
+      changed_when: false
+
+    - name: Increase file descriptor limits
+      pam_limits:
+        domain: '*'
+        limit_type: 'soft'
+        limit_item: nofile
+        value: '65536'
+    - name: Increase file descriptor limits (hard)
+      pam_limits:
+        domain: '*'
+        limit_type: 'hard'
+        limit_item: nofile
+        value: '65536'
+
+    - name: Test different Nginx configurations
+      include_tasks: nginx_config_test.yml
+      loop: "{{ nginx_worker_processes_options }}"
+      loop_control:
+        loop_var: worker_processes
+
+    - name: Apply best Nginx configuration
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+      vars:
+        worker_processes: "{{ best_config.worker_processes }}"
+        worker_connections: "{{ best_config.worker_connections }}"
+        keepalive_timeout: "{{ best_config.keepalive_timeout }}"
+        multi_accept: "{{ best_config.multi_accept }}"
+
+    - name: Restart Nginx to apply final configuration
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Display optimization results
+      debug:
+        msg: |
+          Best configuration found:
+          - Worker processes: {{ best_config.worker_processes }}
+          - Worker connections: {{ best_config.worker_connections }}
+          - Keepalive timeout: {{ best_config.keepalive_timeout }}
+          - Multi accept: {{ best_config.multi_accept }}
+          - Achieved RPS: {{ best_rps | round(0) }}

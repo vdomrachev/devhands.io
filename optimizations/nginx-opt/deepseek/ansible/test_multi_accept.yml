@@ -1,0 +1,46 @@
+- name: Create temporary Nginx config
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf.tmp
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    worker_processes: "{{ worker_processes }}"
+    worker_connections: "{{ worker_connections }}"
+    keepalive_timeout: "{{ keepalive_timeout }}"
+    multi_accept: "{{ multi_accept }}"
+
+- name: Apply temporary Nginx config
+  command: cp /etc/nginx/nginx.conf.tmp /etc/nginx/nginx.conf
+
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted
+
+- name: Warm up Nginx
+  command: wrk -t2 -c100 -d10s {{ test_url }}
+  ignore_errors: yes
+  changed_when: false
+
+- name: Run performance test with wrk
+  command: wrk -t{{ wrk_threads }} -c{{ wrk_connections }} -d{{ wrk_duration }} {{ test_url }}
+  register: wrk_output
+  changed_when: false
+
+- name: Extract RPS from wrk output
+  set_fact:
+    current_rps: "{{ (wrk_output.stdout | regex_search('Requests/sec:\\s+(\\d+\\.?\\d*)'))[1] | float }}"
+
+- name: Record test results
+  lineinfile:
+    path: /var/log/nginx_optimization/results.log
+    line: "worker_processes={{ worker_processes }}, worker_connections={{ worker_connections }}, keepalive={{ keepalive_timeout }}, multi_accept={{ multi_accept }} - RPS: {{ current_rps | round(0) }}"
+    create: yes
+
+- name: Check if this is the best configuration so far
+  set_fact:
+    best_config: "{ 'worker_processes': '{{ worker_processes }}', 'worker_connections': '{{ worker_connections }}', 'keepalive_timeout': '{{ keepalive_timeout }}', 'multi_accept': '{{ multi_accept }}' }"
+    best_rps: "{{ current_rps }}"
+  when: current_rps > best_rps

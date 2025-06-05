@@ -1,0 +1,10 @@
+=== Baseline Configuration Test ===
+Running 30s test @ http://localhost/
+  4 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   221.32us   87.27us   1.16ms   61.45%
+    Req/Sec    73.87k     6.38k   85.29k    69.33%
+  8819498 requests in 30.02s, 3.54GB read
+Requests/sec: 293787.49
+Transfer/sec:    120.76MB
+

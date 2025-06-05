@@ -1,0 +1,18 @@
+=== NGINX PERFORMANCE TEST SUMMARY ===
+Test Date: Thu May 29 09:14:21 PM MSK 2025
+Server: pc2695
+CPU Cores: 72
+Memory: 515860MB
+
+File: baseline_results.txt
+Requests/sec: 293787.49
+
+File: connection_scaling_results.txt
+Requests/sec: 264587.94
+
+File: gzip_results.txt
+Requests/sec: 290022.52
+
+File: optimized_results.txt
+Requests/sec: 280686.21
+
